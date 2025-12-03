@@ -161,6 +161,12 @@ class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactCo
                             result.error?.message ?: "Unknown error"
                         )
                     }
+                    AccessPointCommunicationState.SCANNING_COOLDOWN -> {
+                        val message = result.error?.message?: "Unknown scan cooldown error"
+                        sendEvent(EventNames.UnlockNearestAccessPointUpdate,
+                            "$message ${result.scanCooldownDurationInSeconds} seconds"
+                        )
+                    }
                 }
             }
         }
@@ -201,6 +207,12 @@ class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactCo
                     AccessPointCommunicationState.FAILED -> {
                         sendEvent(EventNames.UnlockNearestAccessPointUpdate,
                             result.error?.message ?: "Unknown error"
+                        )
+                    }
+                    AccessPointCommunicationState.SCANNING_COOLDOWN -> {
+                        val message = result.error?.message?: "Unknown scan cooldown error"
+                        sendEvent(EventNames.UnlockNearestAccessPointUpdate,
+                            "$message ${result.scanCooldownDurationInSeconds} seconds"
                         )
                     }
                 }
