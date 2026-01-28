@@ -9,4 +9,5 @@ struct BrivoConfigurationInput: Decodable {
   let clientId: String
   let clientSecret: String
   let useSDKStorage: Bool
+  let useEuRegion: Bool
 }

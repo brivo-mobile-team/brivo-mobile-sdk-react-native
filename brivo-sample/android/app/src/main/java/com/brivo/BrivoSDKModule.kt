@@ -41,17 +41,39 @@ class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactCo
         UnlockNearestAccessPointUpdate
     }
 
+    private data class BrivoConfigurationInput(
+        val clientId: String,
+        val clientSecret: String,
+        val useSDKStorage: Boolean,
+        val useEuRegion: Boolean
+    )
+
     override fun getName(): String = "BrivoSDKModule"
 
     @ReactMethod
     fun init(brivoConfigurationJSON: String?, promise: Promise) {
         try {
-            val brivoConfiguration = Gson().fromJson(
+            val configInput = Gson().fromJson(
                 brivoConfigurationJSON,
-                BrivoConfiguration::class.java
-            ).copy(serverRegion = ServerRegion.UNITED_STATES)
+                BrivoConfigurationInput::class.java
+            )
+
+            if (configInput == null) {
+                promise.reject(BRIVO_SDK_ERROR, "Invalid configuration JSON")
+                return
+            }
+            
+            val region = if (configInput.useEuRegion) ServerRegion.EUROPE else ServerRegion.UNITED_STATES
+
+            val brivoConfiguration = BrivoConfiguration(
+                configInput.clientId,
+                configInput.clientSecret,
+                configInput.useSDKStorage,
+                region,
+            )
+
             BrivoSDK.init(reactApplicationContext, brivoConfiguration)
-            BrivoSDK.init(reactApplicationContext, brivoConfiguration)
+            
             val localAuthenticationTitle = "Please authenticate"
             val localAuthenticationMessage =
                 "Please use your fingerprint or password to unlock door"
@@ -161,6 +183,12 @@ class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactCo
                             result.error?.message ?: "Unknown error"
                         )
                     }
+                    AccessPointCommunicationState.SCANNING_COOLDOWN -> {
+                        val message = result.error?.message?: "Unknown scan cooldown error"
+                        sendEvent(EventNames.UnlockNearestAccessPointUpdate,
+                            "$message ${result.scanCooldownDurationInSeconds} seconds"
+                        )
+                    }
                 }
             }
         }
@@ -201,6 +229,12 @@ class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactCo
                     AccessPointCommunicationState.FAILED -> {
                         sendEvent(EventNames.UnlockNearestAccessPointUpdate,
                             result.error?.message ?: "Unknown error"
+                        )
+                    }
+                    AccessPointCommunicationState.SCANNING_COOLDOWN -> {
+                        val message = result.error?.message?: "Unknown scan cooldown error"
+                        sendEvent(EventNames.UnlockNearestAccessPointUpdate,
+                            "$message ${result.scanCooldownDurationInSeconds} seconds"
                         )
                     }
                 }
