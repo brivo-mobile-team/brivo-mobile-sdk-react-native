@@ -127,7 +127,7 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
-    def brivo_sdk_version = "2.3.0"
+    def brivo_sdk_version = "2.6.2"
 
     implementation "org.bitbucket.brivoinc.mobile-sdk-android:brivoaccess:$brivo_sdk_version"
     implementation "org.bitbucket.brivoinc.mobile-sdk-android:brivoble:$brivo_sdk_version"
