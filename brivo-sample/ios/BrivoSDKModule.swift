@@ -31,10 +31,13 @@ class BrivoSDKModule: RCTEventEmitter {
     do {
       let configInput = try brivoConfigurationJson.decoded(as: BrivoConfigurationInput.self)
 
+      let regionValue: Region = configInput.useEuRegion ? .eu : .us
+
       let brivoConfig = try BrivoSDKConfiguration(
         clientId: configInput.clientId,
         clientSecret: configInput.clientSecret,
         useSDKStorage: configInput.useSDKStorage,
+        region: regionValue,
         shouldPromptForContinuation: true,
         authUrl: nil,
         apiUrl: nil,

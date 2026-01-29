@@ -102,7 +102,8 @@ export default class PassesScreen extends Component {
         BrivoSDK.init(JSON.stringify({
             "clientId": "<clientID>",
             "clientSecret": "<clientSecret>",
-            "useSDKStorage": true
+            "useSDKStorage": true,
+            "useEuRegion": false,
         }))
             .then(result => {
                 this.retrieveData()
