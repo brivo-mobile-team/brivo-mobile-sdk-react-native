@@ -1,79 +1,171 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Brivo Sample React Native App
 
-# Getting Started
+Sample React Native app demonstrating the Brivo Mobile SDK integration.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Prerequisites
 
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
+- Node.js >= 18
+- Yarn
+- Xcode (for iOS)
+- Android Studio (for Android)
+- CocoaPods
 
 ```bash
-# using npm
-npm start
+brew install node watchman
+npm install -g yarn
+```
 
-# OR using Yarn
+## Configuration
+
+Before running the app, you must provide your Brivo API credentials. Open `PassesScreen.js` and replace the placeholder values in the `BrivoSDK.init` call:
+
+```javascript
+BrivoSDK.init(JSON.stringify({
+    "clientId": "<your-client-id>",
+    "clientSecret": "<your-client-secret>",
+    "useSDKStorage": true,
+    "useEuRegion": false,
+}))
+```
+
+- `clientId` and `clientSecret` are required. You can obtain these from the Brivo developer portal.
+- `useEuRegion` should be set to `true` if your account is on the EU region, `false` for US.
+- Without valid credentials, the SDK will fail to initialize and the app will show an error on launch.
+
+Once the SDK is initialized, you can use the **ADD PASS** button to redeem a pass by entering your email and token. After redeeming, the app will display your access points which you can tap to unlock.
+
+## Setup
+
+```bash
+cd brivo-sample
+yarn install
+```
+
+### iOS
+
+Install CocoaPods dependencies:
+
+```bash
+cd ios
+pod install
+cd ..
+```
+
+### Android
+
+If you encounter the "SDK location not found" error, create or update `android/local.properties`:
+
+```
+sdk.dir=/Users/USERNAME/Library/Android/sdk
+```
+
+## Running the App
+
+### iOS
+
+Open two terminal windows:
+
+**Terminal 1** - Start Metro bundler:
+```bash
 yarn start
+# or
+npx react-native start
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
+**Terminal 2** - Build and run:
 ```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
 yarn ios
+# or
+npx react-native run-ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+#### Simulator Management
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+List available simulators:
+```bash
+xcrun simctl list devices available
+```
 
-## Step 3: Modifying your App
+Boot a specific simulator:
+```bash
+xcrun simctl boot "iPhone 17 Pro"
+```
 
-Now that you have successfully run the app, let's modify it.
+List currently booted simulators:
+```bash
+xcrun simctl list devices booted
+```
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Bring the Simulator app to the foreground:
+```bash
+open -a Simulator
+```
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+Run on a specific simulator by name:
+```bash
+yarn ios --simulator="iPhone 16 Pro"
+# or
+npx react-native run-ios --simulator="iPhone 16 Pro"
+```
 
-## Congratulations! :tada:
+Manually launch/relaunch the app on a booted simulator:
+```bash
+xcrun simctl launch booted com.brivo.sample.react
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+Terminate the app on the simulator:
+```bash
+xcrun simctl terminate booted com.brivo.sample.react
+```
 
-### Now what?
+### Android
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+Open two terminal windows:
 
-# Troubleshooting
+**Terminal 1** - Start Metro bundler:
+```bash
+yarn start
+# or
+npx react-native start
+```
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+**Terminal 2** - Build and run:
+```bash
+yarn android
+# or
+npx react-native run-android
+```
 
-# Learn More
+#### Emulator Management
 
-To learn more about React Native, take a look at the following resources:
+List available emulators:
+```bash
+emulator -list-avds
+```
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Boot a specific emulator:
+```bash
+emulator -avd Pixel_7_API_34
+```
+
+List connected devices and running emulators:
+```bash
+adb devices
+```
+
+Run on a specific device/emulator by ID:
+```bash
+yarn android --deviceId="emulator-5554"
+# or
+npx react-native run-android --deviceId="emulator-5554"
+```
+
+Manually launch the app on a running emulator:
+```bash
+adb shell am start -n com.brivo/.MainActivity
+```
+
+Terminate the app on the emulator:
+```bash
+adb shell am force-stop com.brivo
+```

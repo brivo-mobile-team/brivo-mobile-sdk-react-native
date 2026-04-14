@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import com.brivo.sdk.logger.DefaultLoggerOutput
+
 
 class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactApplicationContext), CoroutineScope {
 
@@ -73,7 +75,8 @@ class BrivoSDKModule(reactApplicationContext: ReactApplicationContext) : ReactCo
             )
 
             BrivoSDK.init(reactApplicationContext, brivoConfiguration)
-            
+            BrivoSDK.addLoggingOutput(DefaultLoggerOutput())
+
             val localAuthenticationTitle = "Please authenticate"
             val localAuthenticationMessage =
                 "Please use your fingerprint or password to unlock door"

@@ -4,8 +4,9 @@ buildscript {
         minSdkVersion = 29
         compileSdkVersion = 35
         targetSdkVersion = 34
-        ndkVersion = "26.1.10909125"
+        ndkVersion = "27.0.12077973"
         kotlinVersion = "1.9.24"
+        REACT_NATIVE_NODE_MODULES_DIR = "$rootDir/../node_modules/react-native"
     }
     repositories {
         google()
