@@ -6,8 +6,8 @@
 
 #
 The current sample app uses the following mobile sdk's:
-- iOS: [2.6.2](https://github.com/brivo-mobile-team/brivo-mobile-sdk-ios/releases/tag/2.6.2)
-- Android: [2.6.2](https://github.com/brivo-mobile-team/brivo-mobile-sdk-android/releases/tag/2.6.2)
+- iOS: [2.7.1](https://github.com/brivo-mobile-team/brivo-mobile-sdk-ios/releases/tag/2.7.1)
+- Android: [2.7.0](https://github.com/brivo-mobile-team/brivo-mobile-sdk-android/releases/tag/2.6.2)
 ##
 
 This README would normally document whatever steps are necessary to get your application up and running.
